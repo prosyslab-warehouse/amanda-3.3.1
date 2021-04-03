@@ -1,0 +1,89 @@
+'\" t
+.\"     Title: script-email
+.\"    Author: Jean-Louis Martineau <martineau@zmanda.com>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 02/21/2012
+.\"    Manual: System Administration Commands
+.\"    Source: Amanda 3.3.1
+.\"  Language: English
+.\"
+.TH "SCRIPT\-EMAIL" "8" "02/21/2012" "Amanda 3\&.3\&.1" "System Administration Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+script-email \- Amanda script to send email notifications
+.SH "DESCRIPTION"
+.PP
+script\-email is an Amanda script implementing the Script API\&. It should not be run by users directly\&. It sends a notification email to the addresses specified in the MAILTO property\&.
+.SH "PROPERTIES"
+.PP
+This section lists the properties that control script\-email\*(Aqs functionality\&. See
+\fBamanda-scripts\fR(7)
+for information on the Script API, script configuration\&.
+.PP
+MAILTO
+.RS 4
+
+List of email addresses that will receive an email on command execution\&. It is a multi\-valued property:
+.nf
+  property "MAILTO" "amanda@domain\&.com" "sysadmin@domain\&.com" "amandauser@domain\&.com"
+.fi
+.RE
+.SH "EXAMPLE"
+
+
+In this example, script\-email is scheduled to be run before the DLE, on the
+server\&.  The unqualified email address \fIamanda\fR will be
+passed to the email system unchanged\&.  The script is then attached to a
+dumptype, which can then be specified for any DLEs which require notification\&.
+.nf
+ define script\-tool pre\-email {
+   comment "email me before this DLE is backed up"
+   plugin  "script\-email"
+   execute\-on pre\-dle\-backup
+   execute\-where server
+   property "mailto" "amanda"
+ }
+
+ define dumptype user\-tar\-email {
+   user\-tar
+   script "pre\-email"
+ }
+.fi
+.SH "SEE ALSO"
+.PP
+\fBamanda\fR(8),
+\fBamanda.conf\fR(5),
+\fBamanda-client.conf\fR(5),
+\fBamanda-scripts\fR(7)
+.PP
+The Amanda Wiki:
+: http://wiki.zmanda.com/
+.SH "AUTHORS"
+.PP
+\fBJean\-Louis Martineau\fR <\&martineau@zmanda\&.com\&>
+.RS 4
+Zmanda, Inc\&. (http://www\&.zmanda\&.com)
+.RE
+.PP
+\fBDustin J\&. Mitchell\fR <\&dustin@zmanda\&.com\&>
+.RS 4
+Zmanda, Inc\&. (http://www\&.zmanda\&.com)
+.RE

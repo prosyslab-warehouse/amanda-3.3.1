@@ -1,0 +1,185 @@
+'\" t
+.\"     Title: amrestore
+.\"    Author: James da Silva <jds@amanda.org>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 02/21/2012
+.\"    Manual: System Administration Commands
+.\"    Source: Amanda 3.3.1
+.\"  Language: English
+.\"
+.TH "AMRESTORE" "8" "02/21/2012" "Amanda 3\&.3\&.1" "System Administration Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+amrestore \- low\-level data\-extraction from Amanda volumes
+.SH "SYNOPSIS"
+.HP \w'\fBamrestore\fR\ 'u
+\fBamrestore\fR [\-\-config\ \fIconfig\fR] [\-r | \-c | \-C] [\-b\ \fIblocksize\fR] [\-f\ \fIfilenum\fR] [\-l\ \fIlabel\fR] [\-p] [\-h] [\fB\-o\fR\ \fIconfigoption\fR...] [{\fIchangerspec\fR} | {[\-\-holding]\ \fIholdingfile\fR}] [\fIhostname\fR\ [\ \fIdiskname\fR\ [\ \fIdatestamp\fR\ [\ \fIhostname\fR\ [\ \fIdiskname\fR\ [\ \fIdatestamp\fR\ \&.\&.\&.\ ]\ ]\ ]\ ]\ ]]
+.PP
+Note that this is the only Amanda command which does not take a configuration name as its first argument\&.
+.SH "DESCRIPTION"
+.PP
+\fIAmrestore\fR
+is a very low\-level tool for extracting data from Amanda volumes\&. It does not consult any catalog information or other metadata, basing its operations only on the headers found on the volume\&. This makes it an appropriate tool for bare\-metal restores of an Amanda server, or other situations where the catalog is not available\&.
+.PP
+See
+\fBamfetchdump\fR(8)
+and
+\fBamrecover\fR(8)
+for higher\-level recoveries\&.
+.PP
+The tool does not reassemble split dumps, but can uncompress compressed dumps\&. Note that decompression may fail for split parts after the first\&. If this occurs, extract the parts without decompressing, concatenate them, and decompress the result\&.
+.PP
+Data is restored from the current volume in
+\fIchangerspec\fR, or from the holding file
+\fIholdingfile\fR\&. In most cases,
+\fIchangerspec\fR
+will name a particular device, e\&.g\&.,
+tape:/dev/nst0
+or
+s3:mybucket/tape\-1\&.
+.PP
+Only dumps matching the dump specification beginning with
+\fIhostname\fR
+are extracted\&. If no specification is given, every file on the volume (or the entire holdingfile) is restored\&. See the "DUMP SPECIFICATIONS" section of
+\fBamanda-match\fR(7)
+for more information\&.
+.PP
+Unless
+\fB\-p\fR
+is used, candidate backup images are extracted to files in the current directory named:
+hostname\&.diskname\&.datestamp\&.dumplevel
+.SH "OPTIONS"
+.PP
+\fB\-b \fR\fB\fIblocksize\fR\fR
+.RS 4
+Use the given blocksize to read the volume\&. The default is defined by the device\&.
+.RE
+.PP
+\fB\-f \fR\fB\fIfilenum\fR\fR
+.RS 4
+Seek to file
+\fIfilenum\fR
+before beginning the restore operation\&.
+.RE
+.PP
+\fB\-l \fR\fB\fIlabel\fR\fR
+.RS 4
+Check that the volume has label
+\fIlabel\fR\&.
+.RE
+.PP
+\fB\-p\fR
+.RS 4
+Pipe the first matching file to standard output\&. This is typically used in a shell pipeline to send the data to a process like
+\fBtar\fR
+for extraction\&.
+.RE
+.PP
+\fB\-c\fR, \fB\-C\fR
+.RS 4
+If the file is not already compressed, compress it using the fastest (\fB\-c\fR) or best (\fB\-C\fR) compression algorithm\&. Note that
+\fBamrestore\fR
+will not re\-compress an already\-compressed file\&. Without either of these options,
+\fBamrestore\fR
+will automatically uncompress any compressed files\&. This option is useful when the destination disk is small\&.
+.RE
+.PP
+\fB\-h\fR
+.RS 4
+Include 32k headers on all output files, similar to a holding file\&. This header can be read by another application or utility (see
+\fBAmanda::Header\fR) during the next phase of processing\&.
+.RE
+.PP
+\fB\-r\fR
+.RS 4
+Output raw files\&. This is similar to
+\fB\-h\fR, but also disables any automatic decompression\&. Output file names will have a
+\&.RAW
+extension\&.
+.RE
+.PP
+\fB\-o \fR\fB\fIconfigoption\fR\fR
+.RS 4
+See the "CONFIGURATION OVERRIDE" section in
+\fBamanda\fR(8)\&.
+.RE
+.SH "EXAMPLES"
+.PP
+The following does an interactive restore of disk
+\fIrz3g\fR
+from host
+\fIseine\fR, to restore particular files\&. Note the use of the
+\fIb\fR
+option to
+\fIrestore\fR, which causes it to read in units of two 512\-byte blocks (1 Kbyte) at a time\&. This helps keep it from complaining about short reads\&.
+.nf
+  amrestore \-p /dev/nrmt9 seine rz3g | tar \-xv
+.fi
+.PP
+The next example extracts all backup images for host
+\fIseine\fR\&. This is a typical way to extract all data for a host after a disk crash\&.
+.nf
+  amrestore /dev/nrmt9 seine
+.fi
+.PP
+If the backup datestamp in the above example is
+20070125
+and
+\fIseine\fR
+has level 0 backups of disks
+\fIrz1a\fR
+and
+\fIrz1g\fR
+on the tape, these files will be created in the current directory:
+.nf
+  seine\&.rz1a\&.19910125\&.0
+  seine\&.rz1g\&.19910125\&.0
+.fi
+.PP
+You may also use
+\fBamrestore\fR
+to extract a backup image from a holding disk file that has not yet been flushed to tape:
+.nf
+  amrestore \-p /amanda/20001119/seine\&.rz1a\&.2 | tar \-xv
+.fi
+.SH "CAVEATS"
+.PP
+\fBGNU\-tar\fR
+must be used to restore files from backup images created with the GNUTAR dumptype\&. Vendor tar programs sometimes fail to read GNU Tar images\&.
+.SH "SEE ALSO"
+.PP
+\fBamanda\fR(8),
+\fBamanda-match\fR(7),
+\fBamfetchdump\fR(8),
+\fBamrecover\fR(8)
+.PP
+The Amanda Wiki:
+: http://wiki.zmanda.com/
+.SH "AUTHORS"
+.PP
+\fBJames da Silva\fR <\&jds@amanda\&.org\&>
+.PP
+\fBStefan G\&. Weichinger\fR <\&sgw@amanda\&.org\&>
+.PP
+\fBDustin J\&. Mitchell\fR <\&dustin@zmanda\&.com\&>
+.RS 4
+Zmanda, Inc\&. (http://www\&.zmanda\&.com)
+.RE

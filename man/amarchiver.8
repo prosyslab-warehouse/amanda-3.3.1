@@ -1,0 +1,90 @@
+'\" t
+.\"     Title: amarchiver
+.\"    Author: Dustin J. Mitchell <dustin@zmanda.com>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 02/21/2012
+.\"    Manual: System Administration Commands
+.\"    Source: Amanda 3.3.1
+.\"  Language: English
+.\"
+.TH "AMARCHIVER" "8" "02/21/2012" "Amanda 3\&.3\&.1" "System Administration Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+amarchiver \- Create, extract or list amanda archive
+.SH "SYNOPSIS"
+.HP \w'\fBamarchiver\fR\ 'u
+\fBamarchiver\fR \-\-version|\-\-create|\-\-extract|\-\-list [\-\-verbose] [\-\-file\ \fIfile\fR] [\fIfilename\fR]... 
+.SH "DESCRIPTION"
+.PP
+\fBAmarchiver\fR
+manipulates amanda archive file\&. On creation, amarchiver doesn\*(Aqt recurse into directories\&. If a filename specifies a directory, it will be ignored\&. If it specifies a character device, amarchiver reads the device and archives the data\&. If a filename specifies a named pipe, amarchiver reads the named pipe and archives the data\&.
+.PP
+Note that this tool is more limited than the Amanda archive library, and may not be appropriate for some archive files \-\- particularly those which use non\-strings in their filenames\&.
+.SH "OPTIONS"
+.PP
+\fB\-\-version\fR
+.RS 4
+print the amarchiver version
+.RE
+.PP
+\fB\-\-create\fR
+.RS 4
+Create an amanda archive\&. Only the supplied filenames are included\&. With one
+\fB\-\-verbose\fR, lists the filenames\&. With two, lists the filenames and sizes\&.
+.RE
+.PP
+\fB\-\-list\fR
+.RS 4
+List the filenames in an amanda archive\&. No additional filenames are allowed on the command line\&.
+.RE
+.PP
+\fB\-\-extract\fR
+.RS 4
+Extract an amanda archive\&. If filenames are supplied, only those files are extracted\&. Files are created in the current directory, suffixed with a dot (\*(Aq\&.\*(Aq) and the attribute ID\&.
+.RE
+.PP
+\fB\-\-verbose\fR
+.RS 4
+Give more information\&.
+.RE
+.PP
+\fB\-\-file\fR file
+.RS 4
+Create, list or extract from the given file instead of stdin/stdout\&.
+.RE
+.SH "SEE ALSO"
+.PP
+\fBamanda\fR(8),
+\fBamanda-archive-format\fR(5)
+.PP
+The Amanda Wiki:
+: http://wiki.zmanda.com/
+.SH "AUTHORS"
+.PP
+\fBDustin J\&. Mitchell\fR <\&dustin@zmanda\&.com\&>
+.RS 4
+Zmanda, Inc\&. (http://www\&.zmanda\&.com)
+.RE
+.PP
+\fBJean\-Louis Martineau\fR <\&martineau@zmanda\&.com\&>
+.RS 4
+Zmanda, Inc\&. (http://www\&.zmanda\&.com)
+.RE

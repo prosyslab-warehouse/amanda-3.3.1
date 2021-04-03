@@ -1,0 +1,135 @@
+'\" t
+.\"     Title: amtape
+.\"    Author: Dustin J. Mitchell <dustin@zmanda.com>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 02/21/2012
+.\"    Manual: System Administration Commands
+.\"    Source: Amanda 3.3.1
+.\"  Language: English
+.\"
+.TH "AMTAPE" "8" "02/21/2012" "Amanda 3\&.3\&.1" "System Administration Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+amtape \- Control Amanda changers
+.SH "SYNOPSIS"
+.HP \w'\fBamtape\fR\ 'u
+\fBamtape\fR [\fB\-o\fR\ \fIconfigoption\fR...] \fIconfig\fR \fIsubcommand\fR [\fIsubcommand_options\fR...]
+.SH "DESCRIPTION"
+.PP
+\fBAmtape\fR
+is the command\-line interface to Amanda\*(Aqs tape changers (\fBamanda-changers\fR(7)) and to the taperscan algorithm (\fBamanda-taperscan\fR(7))\&.
+.PP
+Tape changers maintain a notion of the
+\fIcurrent\fR
+slot for each configuration\&. This may or may not correspond to an actual physical state of the device, but is used by some taperscan algorithms to minimize searching through the slots\&.
+.PP
+Amtape uses the default changer\&. To use a different changer, use the config override option, e\&.g\&.,
+\fB\-otpchanger=otherchanger\fR\&.
+.SH "SUBCOMMANDS"
+.PP
+\fBlabel\fR \fIlabel\fR
+.RS 4
+Search for and load the Amanda tape with label
+[label], also setting the current slot\&.
+.RE
+.PP
+\fBslot\fR \fIslot\fR
+.RS 4
+Load the volume in the given slot, also setting the current slot\&. The slot names
+\fBcurrent\fR,
+\fBnext\fR,
+\fBfirst\fR, and
+\fBlast\fR
+have special meaning\&.
+.RE
+.PP
+\fBcurrent\fR
+.RS 4
+Shorthand for
+\fBslot\fR
+current\&.
+.RE
+.PP
+\fBinventory\fR
+.RS 4
+Show the contents of all slots, based on the changer\*(Aqs cached metadata\&. This is a quick operation as it does not load or unload any volumes, but is not supported by all changers\&.
+.RE
+.PP
+\fBshow\fR [slots]
+.RS 4
+Show the contents of all slots (or listed slots) by loading each slot and reading its label\&. This can be very slow\&. The slots arguments is of the form 1,3\-5,7\&.
+.RE
+.PP
+\fBreset\fR
+.RS 4
+Reset the changer to a known state\&. This subcommand is intended to clear any unknown and potentially incorrect state the changer may have stored\&.
+.RE
+.PP
+\fBeject\fR [\fIdrive\fR]
+.RS 4
+Eject the tape currently in the drive\&. This only applies to some changers\&. Specify a drive (by drive number) if more than one drive is available\&.
+.RE
+.PP
+\fBclean\fR [\fIdrive\fR]
+.RS 4
+If a cleaning tape is defined for the changer, used it to clean the specified drive\&. The
+[drive]
+is optional if the changer only has one drive\&.
+.RE
+.PP
+\fBtaper\fR
+.RS 4
+Run the taperscan algorithm (see
+\fBamanda-taperscan\fR(7)), displaying information about the progress of the scan\&.
+.RE
+.PP
+\fBupdate\fR [what]
+.RS 4
+Update changer state\&. Consult
+\fBamanda-changers\fR(7)
+for changer\-specific details on the format of
+what\&.
+.RE
+.PP
+\fB\-o \fR\fB\fIconfigoption\fR\fR
+.RS 4
+See the "CONFIGURATION OVERRIDE" section in
+\fBamanda\fR(8)\&.
+.RE
+.SH "SEE ALSO"
+.PP
+\fBamanda\fR(8),
+\fBamanda-changers\fR(7),
+\fBamanda-taperscan\fR(7),
+\fBamanda-devices\fR(7)
+.PP
+The Amanda Wiki:
+: http://wiki.zmanda.com/
+.SH "AUTHORS"
+.PP
+\fBDustin J\&. Mitchell\fR <\&dustin@zmanda\&.com\&>
+.RS 4
+Zmanda, Inc\&. (http://www\&.zmanda\&.com)
+.RE
+.PP
+\fBJames da Silva\fR <\&jds@amanda\&.org\&>
+.PP
+\fBStefan G\&. Weichinger\fR <\&sgw@amanda\&.org\&>

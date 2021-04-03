@@ -1,0 +1,161 @@
+'\" t
+.\"     Title: disklist
+.\"    Author: James da Silva <jds@amanda.org>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 02/21/2012
+.\"    Manual: File formats and conventions
+.\"    Source: Amanda 3.3.1
+.\"  Language: English
+.\"
+.TH "DISKLIST" "5" "02/21/2012" "Amanda 3\&.3\&.1" "File formats and conventions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+disklist \- List of partitions to back up for Amanda
+.SH "DESCRIPTION"
+.PP
+The
+\fIdisklist\fR
+file determines which disks will be backed up by Amanda\&. The file usually contains one line per disk:
+.nf
+\fIhostname diskname\fR [\fIdiskdevice\fR] \fIdumptype\fR [\fIspindle\fR [\fIinterface\fR] ]
+.fi
+.PP
+All pairs [
+\fIhostname diskname\fR
+] must be unique\&.
+.PP
+Lines starting with # are ignored, as are blank lines\&. The fields have the following meanings:
+.PP
+\fIhostname\fR
+.RS 4
+The name of the host to be backed up\&. If
+\fBdiskdevice\fR
+refers to a PC share, this is the host Amanda will run the Samba
+\fBsmbclient\fR
+program on to back up the share\&.
+.RE
+.PP
+\fIdiskname\fR
+.RS 4
+The name of the disk (a label)\&. In most case, you set your
+\fBdiskname\fR
+to the
+\fBdiskdevice\fR
+and you don\*(Aqt set the
+\fBdiskdevice\&.\fR
+If you want multiple entries with the same
+\fBdiskdevice\fR, you must set a different
+\fBdiskname\fR
+for each entry\&. It\*(Aqs the
+\fBdiskname\fR
+that you use on the commandline for any Amanda command\&. Look at the example/disklist file for example\&.
+.RE
+.PP
+\fIdiskdevice\fR
+.RS 4
+Default: same as diskname\&. The name of the disk device to be backed up\&. It may be a full device name, a device name without the
+/dev/
+prefix, e\&.g\&.
+\fIsd0a\fR, or a mount point such as
+/usr\&.
+.sp
+It may also refer to a PC share by starting the name with two (forward) slashes, e\&.g\&.
+//some\-pc/home\&. In this case, the
+\fBprogram\fR
+option in the associated
+\fBdumptype\fR
+must be entered as
+\fBGNUTAR\fR\&. It is the combination of the double slash disk name and
+\fBprogram GNUTAR\fR
+in the
+\fBdumptype\fR
+that triggers the use of Samba\&.
+.RE
+.PP
+\fIdumptype\fR
+.RS 4
+Refers to a
+\fBdumptype\fR
+defined in the
+\fBamanda\&.conf\fR
+file\&.
+\fIDumptype\fRs specify backup related parameters, such as whether to compress the backups, whether to record backup results in
+/etc/dumpdates, the disk\*(Aqs relative priority, etc\&.
+.RE
+.PP
+\fIspindle\fR
+.RS 4
+Default:
+\fB\-1\fR\&. A number used to balance backup load on a host\&. Amanda will not run multiple backups at the same time on the same spindle, unless the spindle number is \-1, which means there is no spindle restriction\&.
+.RE
+.PP
+\fIinterface\fR
+.RS 4
+Default:
+\fIlocal\fR\&. The name of a network interface definition in the
+\fBamanda\&.conf\fR
+file, used to balance network load\&.
+.RE
+.PP
+Instead of naming a
+\fBdumptype\fR, it is possible to define one in\-line, enclosing
+\fBdumptype\fR
+options within curly braces, one per line, just like a
+\fBdumptype\fR
+definition in
+\fBamanda\&.conf\fR\&. Since pre\-existing
+\fBdumptype\fRs are valid option names, this syntax may be used to customize
+\fBdumptype\fRs for particular disks\&.
+.PP
+A line break
+\fBmust\fR
+follow the left curly bracket\&.
+.PP
+For instance, if a
+\fBdumptype\fR
+named
+\fInormal\fR
+is used for most disks, but use of the holding disk needs to be disabled for the file system that holds it, this would work instead of defining a new dumptype:
+.nf
+\fIhostname diskname\fR [ \fIdiskdevice\fR ] {
+  normal
+  holdingdisk never
+} [ \fIspindle\fR [ \fIinterface\fR ] ]
+.fi
+.PP
+The { must appear at the end of a line, and the } on its own line possibly followed by the spindle and interface\&.
+.SH "SEE ALSO"
+.PP
+\fBamanda\fR(8),
+\fBamanda.conf\fR(5)
+.PP
+The Amanda Wiki:
+: http://wiki.zmanda.com/
+.SH "AUTHORS"
+.PP
+\fBJames da Silva\fR <\&jds@amanda\&.org\&>
+.PP
+\fBStefan G\&. Weichinger\fR <\&sgw@amanda\&.org\&>
+.PP
+\fBDustin J\&. Mitchell\fR <\&dustin@zmanda\&.com\&>
+.RS 4
+Zmanda, Inc\&. (http://www\&.zmanda\&.com)
+.RE

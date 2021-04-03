@@ -1,0 +1,181 @@
+'\" t
+.\"     Title: amanda-applications
+.\"    Author: Jean-Louis Martineau <martineau@zmanda.com>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 02/21/2012
+.\"    Manual: Miscellanea
+.\"    Source: Amanda 3.3.1
+.\"  Language: English
+.\"
+.TH "AMANDA\-APPLICATIONS" "7" "02/21/2012" "Amanda 3\&.3\&.1" "Miscellanea"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+amanda-applications \- Application\-api for amanda
+.SH "DESCRIPTION"
+.PP
+Describe how to use application with Amanda
+.SH "APPLICATIONS"
+.PP
+This section lists the applications included with Amanda\&. See the individual man pages for instructions on using them\&. For complete How\-To information, consult the Amanda wiki at http://wiki\&.zmanda\&.com\&.
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fBamgtar\fR(8),
+\- use GNU Tar to backup and restore data\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fBampgsql\fR(8),
+\- use PostgreSQL\*(Aqs continuous WAL archiving\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fBamraw\fR(8),
+\- use open and read to read the data\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fBamsamba\fR(8),
+\- use smbclient to backup and restore data\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fBamstar\fR(8),
+\- use star to backup and restore data\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fBamsuntar\fR(8),
+\- use native tar on Solaris to backup and restore data\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fBamzfs-sendrecv\fR(8),
+\- use zfs to create a snapshot and use \*(Aqzfs send\*(Aq to generate the backup\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fBamzfs-snapshot\fR(8),
+\- use zfs to create a snapshot and for use with other applications (e\&.g\&. amgtar)
+.RE
+.SH "DEFINING APPLICATIONS"
+.PP
+An application is defined in
+\fBamanda.conf\fR(5)
+as follows:
+.sp
+.nf
+define application\-tool $appconfigname {
+   plugin "$pluginname"
+   property "$PROPERTY_NAME" "$PROPERTY_VALUE"
+   \&.\&.\&.
+}
+.fi
+and then referenced in a dumptype as
+.sp
+.nf
+define dumptype $dumptypename {
+   \&.\&.\&.
+   program "APPLICATION"
+   application "$appconfigname"
+}
+.fi
+.PP
+Application properties, like Amanda configuration parameters, are insensitive to case, and
+\-
+(dash) and
+_
+(underscore) may be used interchangeably\&.
+.PP
+See the individual plugin documentation for properties applicable to each plugin\&.
+.SH "SEE ALSO"
+.PP
+\fBamanda\fR(8),
+\fBamanda.conf\fR(5)
+.PP
+The Amanda Wiki:
+: http://wiki.zmanda.com/
+.SH "AUTHORS"
+.PP
+\fBJean\-Louis Martineau\fR <\&martineau@zmanda\&.com\&>
+.RS 4
+Zmanda, Inc\&. (http://www\&.zmanda\&.com)
+.RE
+.PP
+\fBDustin J\&. Mitchell\fR <\&dustin@zmanda\&.com\&>
+.RS 4
+Zmanda, Inc\&. (http://www\&.zmanda\&.com)
+.RE

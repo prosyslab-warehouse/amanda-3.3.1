@@ -1,0 +1,173 @@
+'\" t
+.\"     Title: amfetchdump
+.\"    Author: John Stange <building@nap.edu>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 02/21/2012
+.\"    Manual: System Administration Commands
+.\"    Source: Amanda 3.3.1
+.\"  Language: English
+.\"
+.TH "AMFETCHDUMP" "8" "02/21/2012" "Amanda 3\&.3\&.1" "System Administration Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+amfetchdump \- extract backup images from multiple Amanda tapes\&.
+.SH "SYNOPSIS"
+.HP \w'\fBamfetchdump\fR\ 'u
+\fBamfetchdump\fR [\-c|\-C|\-L] [\-p|\-n] [\-a] [\-O\ \fIdirectory\fR] [\-d\ \fIdevice\fR] [\-h] [\-\-header\-file\ \fIfilename\fR] [\-\-header\-fd\ \fIfd\fR] [\fB\-o\fR\ \fIconfigoption\fR...] \fIconfig\fR \fIhostname\fR [\fIdisk\fR\ [\ \fIdate\fR\ [\ \fIlevel\fR\ [\ \fIhostname\fR\ [\&.\&.\&.]\ ]\ ]\ ]]
+.SH "DESCRIPTION"
+.PP
+\fBAmfetchdump\fR
+pulls one or more matching dumps from tape or from the holding disk, handling the reassembly of multi\-tape split dump files as well as any tape autochanger operations\&.
+.PP
+It will automatically use the Amanda catalog to locate available dumps on tape, in the same way that the
+\fBfind\fR
+feature of
+\fBamadmin\fR(8)
+lists available dumps\&.
+.PP
+The
+\fIhostname\fR,
+\fIdiskname\fR,
+\fIdatestamp\fR, and
+\fIlevel\fR
+dump specifications are further described in
+\fBamanda-match\fR(7)\&. Note that at minimum a
+\fIhostname\fR
+must be specified\&.
+.PP
+Unless
+\fB\-p\fR
+is used, backup images are extracted to files in the current directory named:
+.PP
+If a changer error occurs, or the
+\fB\-d\fR
+option is given, then amfetchdump prompts for each required volume\&.
+.PP
+\fIhostname\&.diskname\&.datestamp\&.dumplevel\fR
+.SH "OPTIONS"
+.PP
+\fB\-p\fR
+.RS 4
+Pipe exactly one complete dump file to
+\fIstdout\fR, instead of writing the file to disk\&. This will restore only the first matching dumpfile (where "first" is determined by the dump log search facility)\&.
+.RE
+.PP
+\fB\-h\fR
+.RS 4
+Output the amanda header as a 32K block to same output as the image\&.
+.RE
+.PP
+\fB\-\-header\-fd\fR \fIfd\fR
+.RS 4
+Output the amanda header to the numbered file descriptor\&.
+.RE
+.PP
+\fB\-\-header\-file\fR \fIfilename\fR
+.RS 4
+Output the amanda header to the filename\&.
+.RE
+.PP
+\fB\-d\fR \fIdevice_or_changer\fR
+.RS 4
+Restore from this device or changer instead of the default, prompting for each volume\&.
+.RE
+.PP
+\fB\-O\fR \fIdirectory\fR
+.RS 4
+Output restored files to this directory, instead of to the current working directory\&.
+.RE
+.PP
+\fB\-c\fR
+.RS 4
+Compress output, fastest method available\&.
+.RE
+.PP
+\fB\-C\fR
+.RS 4
+Compress output, smallest file size method available\&.
+.RE
+.PP
+\fB\-l\fR
+.RS 4
+Leave dumps in the compressed/uncompressed state in which they were found on tape\&. By default,
+\fBamfetchdump\fR
+will automatically uncompress when restoring\&.
+.RE
+.PP
+\fB\-a\fR
+.RS 4
+Assume that all tapes are already available, via tape changer or otherwise, instead of prompting the operator to ensure that all tapes are loaded\&.
+.RE
+.PP
+\fB\-n\fR
+.RS 4
+Do not reassemble split dump files at all, just restore each piece as an individual file\&.
+.RE
+.PP
+\fB\-o\fR \fIconfigoption\fR
+.RS 4
+See the "\fBCONFIGURATION OVERRIDE\fR" section in
+\fBamanda\fR(8)\&.
+.RE
+.SH "EXAMPLES"
+.PP
+All the examples here assume your configuration is called
+\fISetA\fR\&.
+.PP
+Here\*(Aqs a simple case, restoring all known dumps of the host vanya to the current working directory\&.
+.nf
+$ amfetchdump SetA vanya
+.fi
+.PP
+A more likely scenario involves restoring a particular dump from a particular date\&. We\*(Aqll pipe this one to
+\fBGNU\-tar\fR
+as well, to automatically extract the dump\&.
+.nf
+$ amfetchdump \-p SetA vanya /home 20051020 | gtar \-xvpf \-
+.fi
+.SH "CAVEATS"
+.PP
+\fBAmfetchdump\fR
+is dependent on accessing your server\*(Aqs config, tape changer, and (normally) dump logs\&. As such, it\*(Aqs not necessarily the most useful tool when those have all been wiped out and you desperately need to pull things from your tape\&. Pains have been taken to make it as capable as possible, but for seriously minimialist restores, look to
+\fBamrestore\fR(8)
+or
+\fBdd\fR(8)
+instead\&.
+.SH "SEE ALSO"
+.PP
+\fBamanda\fR(8),
+\fBamanda-match\fR(7),
+\fBamadmin\fR(8),
+\fBamrestore\fR(8)
+.PP
+The Amanda Wiki:
+: http://wiki.zmanda.com/
+.SH "AUTHORS"
+.PP
+\fBJohn Stange\fR <\&building@nap\&.edu\&>
+.RS 4
+National Academies Press
+.RE
+.PP
+\fBIan Turner\fR <\&ian@zmanda\&.com\&>
+.RS 4
+Zmanda, Inc\&. (http://www\&.zmanda\&.com)
+.RE

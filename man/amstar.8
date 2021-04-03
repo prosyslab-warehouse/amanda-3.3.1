@@ -1,0 +1,162 @@
+'\" t
+.\"     Title: amstar
+.\"    Author: Jean-Louis Martineau <martineau@zmanda.com>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 02/21/2012
+.\"    Manual: System Administration Commands
+.\"    Source: Amanda 3.3.1
+.\"  Language: English
+.\"
+.TH "AMSTAR" "8" "02/21/2012" "Amanda 3\&.3\&.1" "System Administration Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+amstar \- Amanda Application to interface with star
+.SH "DESCRIPTION"
+.PP
+Amstar is an Amanda Application API script\&. It should not be run by users directly\&. It uses star to backup and restore data\&.
+.PP
+The
+\fBdiskdevice\fR
+in the disklist (DLE) must be the directory to backup\&.
+.SH "INCLUDE - EXCLUDE"
+.PP
+amstar doesn\*(Aqt support include\&. Both \*(Aqexclude list\*(Aq and \*(Aqexclude file\*(Aq are supported\&. There is a maximum of 100 patterns (limit of star)\&.
+.PP
+Moving directories into and out of directories on the exclude list causes incremental backups to not contain the files in the moved directories until the next full backup unless the moved files are modified after the move\&.
+.SH "PROPERTIES"
+.PP
+This section lists the properties that control amstar\*(Aqs functionality\&. See
+\fBamanda-applications\fR(7)
+for information on application properties and how they are configured\&.
+.PP
+ACL
+.RS 4
+
+If "YES" (the default), amstar will store files acl by passing the \fI\-acl\fR argument to star\&. If "NO", then the \fI\-acl\fR option is not given to star, and it will not try to backup the acl\&.
+.RE
+.PP
+COMMAND\-OPTIONS
+.RS 4
+If set, theses options are passed asis to star\&. Each option must be a different value of the property\&. Some option can break how amanda do backup, use it with care\&.
+
+Use:
+.nf
+  property "COMMAND\-OPTIONS" "\-\-foo" "bar"
+.fi
+
+Do not use:
+.nf
+  property "COMMAND\-OPTIONS" "\-\-foo bar"
+.fi
+.RE
+.PP
+DIRECTORY
+.RS 4
+
+If set, gnutar will backup from that directory instead of the \fIdiskdevice\fR set by the DLE\&. On restore, the data is restore in that directpory instead of the current working directory\&.
+.RE
+.PP
+ONE\-FILE\-SYSTEM
+.RS 4
+
+The default is "YES"\&. This property is deprecated and the default value can\*(Aqt be changed\&. star requires it when it works in dump mode\&.  This corresponds to the \fI\-xdev\fR option of star\&.
+.RE
+.PP
+SPARSE
+.RS 4
+
+If "YES" (the default), star will store sparse files efficiently\&. If "NO", then the \fI\-sparse\fR option is not given to star, and it will not try to detect sparse files\&.
+.RE
+.PP
+STAR\-DLE\-TARDUMP
+.RS 4
+
+If "YES", amstar will use a different tardump file for each DLE\&. The default is "NO"\&.  This property is needed with older versions of star doing many dumps in parallel, because of a race condition in updating the tardump file\&.
+.RE
+.PP
+STAR\-PATH
+.RS 4
+
+The path to the star binary\&. The default is set when Amanda is built by the
+\-\-with\-star configure option\&.
+.RE
+.PP
+STAR\-TARDUMP
+.RS 4
+
+The directory where star stores the database it uses to generate incremental
+dumps\&.  The default is /etc/tardumps\&.
+.RE
+.PP
+NORMAL
+.RS 4
+
+List all regex (POSIX Extended Regular Expression syntax) that are normal output from star\&. These output are in the "FAILED DUMP DETAILS" section of the email report if the dump result is STRANGE or FAILED\&. Default values:
+.nf
+  "^could not open conf file"
+  "^Type of this level "
+  "^Date of this level "
+  "^Date of last level "
+  "^Dump record  level "
+  "^Throughput"
+  "^\&.*is sparse$"
+  "^star: dumped [0\-9][0\-9]* (tar )?files"
+  "^\&.*The following problems occurred during \&.* processing\&.*$"
+  "^\&.*Processed all possible files, despite earlier errors\&.*$"
+  "^\&.*not written due to problems during backup\&.*$"
+.fi
+To treat one of these default patterns differently, specify it explicitly in a different property\&.
+.RE
+.PP
+IGNORE
+.RS 4
+
+List all regex (POSIX Extended Regular Expression syntax) that amanda ignore\&. These output are never in the email report\&. 
+.RE
+.PP
+STRANGE
+.RS 4
+
+List all regex (POSIX Extended Regular Expression syntax) that are strange output from star\&. All star output that doesn\*(Aqt match a normal or ignore regex are strange by default\&. The result of the dump is STRANGE if star produce a strange output\&. These output are in the "FAILED DUMP DETAILS" section of the email report\&.
+.nf
+  "^Perform a level 0 dump first\&.*$"
+.fi
+To treat one of these default patterns differently, specify it explicitly in a different property\&.
+.RE
+.SH "SEE ALSO"
+.PP
+\fBamanda\fR(8),
+\fBamanda.conf\fR(5),
+\fBamanda-applications\fR(7)
+.PP
+The Amanda Wiki:
+: http://wiki.zmanda.com/
+.SH "AUTHORS"
+.PP
+\fBJean\-Louis Martineau\fR <\&martineau@zmanda\&.com\&>
+.RS 4
+Zmanda, Inc\&. (http://www\&.zmanda\&.com)
+.RE
+.PP
+\fBDustin J\&. Mitchell\fR <\&dustin@zmanda\&.com\&>
+.RS 4
+Zmanda, Inc\&. (http://www\&.zmanda\&.com)
+.RE

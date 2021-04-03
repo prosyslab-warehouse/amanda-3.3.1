@@ -1,0 +1,466 @@
+'\" t
+.\"     Title: amanda-client.conf
+.\"    Author: James da Silva <jds@amanda.org>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 02/21/2012
+.\"    Manual: File formats and conventions
+.\"    Source: Amanda 3.3.1
+.\"  Language: English
+.\"
+.TH "AMANDA\-CLIENT\&.CON" "5" "02/21/2012" "Amanda 3\&.3\&.1" "File formats and conventions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+amanda-client.conf \- Client configuration file for Amanda, the Advanced Maryland Automatic Network Disk Archiver
+.SH "DESCRIPTION"
+.PP
+\fBamanda-client.conf\fR(5)
+is the client configuration file for Amanda\&. This manpage lists the relevant sections and parameters of this file for quick reference\&.
+.PP
+The files
+\fB<CONFIG_DIR>/amanda\-client\&.conf\fR
+and
+\fB<CONFIG_DIR>/<config>/amanda\-client\&.conf\fR
+are loaded\&.
+.SH "SYNTAX"
+
+
+The syntax of \fBamanda-client.conf\fR(5) is identical to that for
+\fBamanda.conf\fR(5)\&.
+.SH "GLOBAL PARAMETERS"
+.PP
+\fBconf\fR \fIstring\fR
+.RS 4
+Default:
+\fISet by configure\fR\&. The conf use by amrecover\&.
+.RE
+.PP
+\fBclient\-username\fR \fIstring\fR
+.RS 4
+Default:
+\fICLIENT_LOGIN\fR\&. Similar to the parameter of the same name in
+\fBamanda.conf\fR(5), this specifies the username that
+\fBamrecover\fR
+should send when connecting to the server\&. It should match the username specified in
+\&.amandahosts
+on the server\&.
+.RE
+.PP
+\fBclient\-port\fR [ \fIint\fR | \fIstring\fR ]
+.RS 4
+Default:
+\fI"amanda"\fR\&. Similar to the parameter of the same name in
+\fBamanda.conf\fR(5), this specifies the port to connect on the server\&. It can be a service name or a numeric port number\&.
+.RE
+.PP
+\fBamdump\-server\fR \fIstring\fR
+.RS 4
+No default:
+\fISet by configure\fR\&. The amanda server to connect with the amdump_client program\&.
+.RE
+.PP
+\fBindex\-server\fR \fIstring\fR
+.RS 4
+Default:
+\fISet by configure\fR\&. The amindexd server amrecover will connect to\&.
+.RE
+.PP
+\fBtape\-server\fR \fIstring\fR
+.RS 4
+Default:
+\fISet by configure\fR\&. The amidxtaped server amrecover will connect to\&.
+.RE
+.PP
+\fBtapedev\fR \fIstring\fR
+.RS 4
+Default:
+\fISet by configure\fR\&. The tapedev amrecover will use\&.
+.RE
+.PP
+\fBauth\fR \fIstring\fR
+.RS 4
+Default:
+\fB"bsdtcp"\fR\&. Type of authorization to perform between tape server and backup client hosts\&.
+.sp
+\fB"bsd"\fR, bsd authorization with udp initial connection and one tcp connection by data stream\&.
+.sp
+\fB"bsdtcp"\fR, bsd authorization but use only one tcp connection\&.
+.sp
+\fB"bsdudp"\fR, like bsd, but will use only one tcp connection for all data stream\&.
+.sp
+\fB"krb5"\fR
+to use Kerberos\-V authorization\&.
+.sp
+\fB"local"\fR, if the client is the server, it doesn\*(Aqt require authencation setup\&.
+.sp
+\fB"rsh"\fR
+to use rsh authorization\&.
+.sp
+\fB"ssh"\fR
+to use OpenSSH authorization\&.
+.RE
+.PP
+\fBssh\-keys\fR \fIstring\fR
+.RS 4
+Default:
+\fINo default\fR\&. The key file the ssh auth will use, it must be the private key\&. If this parameter is not specified, then the default ssh key will be used\&.
+.RE
+.PP
+\fBgnutar\-list\-dir\fR \fIstring\fR
+.RS 4
+Default from configure
+\fI\-\-with\-gnutar\-listdir=DIR\fR\&. The directory where gnutar keep its state file\&.
+.RE
+.PP
+\fBmailer\fR \fIstring\fR
+.RS 4
+Default found by configure\&. A mail program that can send mail with \*(Aq\fIMAILER \-s "subject" user < message_file\fR\*(Aq\&.
+.RE
+.PP
+\fBamandates\fR \fIstring\fR
+.RS 4
+Default:
+\fI/etc/amandates\fR\&. The file where amanda keep the last date of each dumplevel\&.
+.RE
+.PP
+\fBconnect\-tries\fR \fIint\fR
+.RS 4
+Default:
+\fI3\fR\&. How many times the server will try a connection\&.
+.RE
+.PP
+\fBrep\-tries\fR \fIint\fR
+.RS 4
+Default:
+\fI5\fR\&. How many times amandad will resend a REP packet if it doesn\*(Aqt get the ACK packet\&.
+.RE
+.PP
+\fBdebug\-days\fR \fIint\fR
+.RS 4
+Default:
+\fI3\fR\&. The number of days the debug files are kept\&.
+.RE
+.PP
+\fBdebug\-amandad\fR \fIint\fR
+.RS 4
+Default:
+\fI0\fR\&. Debug level of the amandad process
+.RE
+.PP
+\fBdebug\-amidxtaped\fR \fIint\fR
+.RS 4
+Default:
+\fI0\fR\&. Debug level of the amidxtaped process
+.RE
+.PP
+\fBdebug\-amindexd\fR \fIint\fR
+.RS 4
+Default:
+\fI0\fR\&. Debug level of the amindexd process
+.RE
+.PP
+\fBdebug\-amrecover\fR \fIint\fR
+.RS 4
+Default:
+\fI0\fR\&. Debug level of the amrecover process
+.RE
+.PP
+\fBdebug\-auth\fR \fIint\fR
+.RS 4
+Default:
+\fI0\fR\&. Debug level of the auth module
+.RE
+.PP
+\fBdebug\-event\fR \fIint\fR
+.RS 4
+Default:
+\fI0\fR\&. Debug level of the event module
+.RE
+.PP
+\fBdebug\-holding\fR \fIint\fR
+.RS 4
+Default:
+\fI0\fR\&. Debug level of the holdingdisk module
+.RE
+.PP
+\fBdebug\-protocol\fR \fIint\fR
+.RS 4
+Default:
+\fI0\fR\&. Debug level of the protocol module
+.RE
+.PP
+\fBdebug\-selfcheck\fR \fIint\fR
+.RS 4
+Default:
+\fI0\fR\&. Debug level of the selfcheck process
+.RE
+.PP
+\fBdebug\-sendsize\fR \fIint\fR
+.RS 4
+Default:
+\fI0\fR\&. Debug level of the sendsize process
+.RE
+.PP
+\fBdebug\-sendbackup\fR \fIint\fR
+.RS 4
+Default:
+\fI0\fR\&. Debug level of the sendbackup process
+.RE
+.PP
+\fBreserved\-udp\-port\fR \fIint\fR,\fIint\fR
+.RS 4
+Default: \-\-with\-udpportrange or
+\fI512,1023\fR\&. Reserved udp port that will be used (amrecover with bsd or bsdudp)
+.RE
+.PP
+\fBreserved\-tcp\-port\fR \fIint\fR,\fIint\fR
+.RS 4
+Default: \-\-with\-low\-tcpportrange or
+\fI512,1023\fR\&. Reserved tcp port that will be used (amrecover with bsdtcp)
+.RE
+.PP
+\fBunreserved\-tcp\-port\fR \fIint\fR,\fIint\fR
+.RS 4
+Default: \-\-with\-tcpportrange or
+\fI1025,65536\fR\&. Unreserved tcp port that will be used (bsd, bsdudp)
+.RE
+.PP
+\fBproperty\fR \fIstring\fR \fIstring\fR+
+.RS 4
+Adds a global property for this client host, useful for e\&.g\&., Application API plugins\&. The first string is the property name, the following strings are the property values
+.RE
+.SH "APPLICATION SECTION"
+.PP
+The
+\fBamanda\-client\&.conf\fR
+file may define multiple types of application\&. The information is entered in a
+\fBapplication\fR
+section, which looks like this:
+.nf
+define application "\fIname\fR" {
+    \fIapplication\-option\fR \fIapplication\-value\fR
+    \&.\&.\&.
+}
+.fi
+.PP
+\fIname\fR
+is the name of this type of application\&.
+.PP
+The setting from an application is merged with the dle setting if the
+\fIname\fR
+is the same as the
+\fBclient\-application\-name\fR
+from the dle or if the
+\fBclient\-application\-name\fR
+from the dle is not set and the
+\fIname\fR
+is the same as the
+\fBplugin\fR
+from the dle\&.
+.PP
+The application options and values are:
+.PP
+\fBclient\-application\-name\fR \fIstring\fR
+.RS 4
+Default:
+\fInone\fR\&. Not use on the client\&.
+.RE
+.PP
+\fBcomment\fR \fIstring\fR
+.RS 4
+Default:
+\fInone\fR\&. A comment string describing this application\&.
+.RE
+.PP
+\fBplugin\fR \fIstring\fR
+.RS 4
+No default\&. Must be set to the name of the program\&. This program must be in the
+\fI$libexecdir/amanda/application\fR
+directory on the client\&. If set, it must be the same as the dle
+\fBplugin\fR\&.
+.RE
+.PP
+\fBproperty\fR [\fBappend\fR] [\fBpriority\fR] \fIstring\fR \fIstring\fR+
+.RS 4
+No default\&. You can set property for the application, each application have a different set of property\&. Both strings are quoted; the first string contains the name of the property to set, and the others contains its values\&.
+\fBappend\fR
+keyword append the values to the list of values for that property\&.
+\fBpriority\fR
+keyword disallow the setting of that property on the server\&.
+.RE
+.SH "SCRIPT SECTION"
+.PP
+The
+\fBamanda\-client\&.conf\fR
+file may define multiple types of script\&. The information is entered in a
+\fBscript\fR
+section, which looks like this:
+.nf
+define script "\fIname\fR" {
+    \fIscript\-option\fR \fIscript\-value\fR
+    \&.\&.\&.
+}
+.fi
+.PP
+\fIname\fR
+is the name of this type of script\&.
+.PP
+The setting from a script is merged with the dle setting if the
+\fIname\fR
+is the same as the
+\fBclient\-script\-name\fR
+from the dle or if the
+\fBclient\-script\-name\fR
+from the dle is not set and the
+\fIname\fR
+is the same as the
+\fBplugin\fR
+from the dle\&.
+.PP
+The script options and values are:
+.PP
+\fBclient\-script\-name\fR \fIstring\fR
+.RS 4
+Default:
+\fInone\fR\&. Not used on the client\&.
+.RE
+.PP
+\fBcomment\fR \fIstring\fR
+.RS 4
+Default:
+\fInone\fR\&. A comment string describing this script\&.
+.RE
+.PP
+\fBplugin\fR \fIstring\fR
+.RS 4
+No default\&. Must be set to the name of the program\&. This program must be in the
+\fI$libdir/amanda/application\fR
+directory on the client\&. If set, it must be the same as the dle
+\fBplugin\fR\&.
+.RE
+.PP
+\fBexecute\-where\fR \fBclient\fR
+.RS 4
+Default:
+\fBclient\fR\&. Value can\*(Aqt be changed\&.
+.RE
+.PP
+\fBexecute\-on\fR \fIexecute_on\fR[,\fIexecute_on\fR]*
+.RS 4
+No default\&. When the script must be executed, you can specify many of them:
+.PP
+\fBpre\-dle\-amcheck\fR
+.RS 4
+Execute before the amcheck command for the dle\&.
+.RE
+.PP
+\fBpre\-host\-amcheck\fR
+.RS 4
+Execute before the amcheck command for all dle for the client\&.
+.RE
+.PP
+\fBpost\-dle\-amcheck\fR
+.RS 4
+Execute after the amcheck command for the dle\&.
+.RE
+.PP
+\fBpost\-host\-amcheck\fR
+.RS 4
+Execute after the amcheck command for all dle for the client\&.
+.RE
+.PP
+\fBpre\-dle\-estimate\fR
+.RS 4
+Execute before the estimate command for the dle\&.
+.RE
+.PP
+\fBpre\-host\-estimate\fR
+.RS 4
+Execute before the estimate command for all dle for the client\&.
+.RE
+.PP
+\fBpost\-dle\-estimate\fR
+.RS 4
+Execute after the estimate command for the dle\&.
+.RE
+.PP
+\fBpost\-host\-estimate\fR
+.RS 4
+Execute after the estimate command for all dle for the client\&.
+.RE
+.PP
+\fBpre\-dle\-backup\fR
+.RS 4
+Execute before the backup command for the dle\&.
+.RE
+.PP
+\fBpost\-dle\-backup\fR
+.RS 4
+Execute after the backup command for the dle\&.
+.RE
+.PP
+\fBpre\-recover\fR
+.RS 4
+Execute before any level is recovered\&.
+.RE
+.PP
+\fBpost\-recover\fR
+.RS 4
+Execute after all levels are recovered\&.
+.RE
+.PP
+\fBpre\-level\-recover\fR
+.RS 4
+Execute before each level recovery\&.
+.RE
+.PP
+\fBpost\-level\-recover\fR
+.RS 4
+Execute after each level recovery\&.
+.RE
+.PP
+\fBinter\-level\-recover\fR
+.RS 4
+Execute between two levels of recovery\&.
+.RE
+.RE
+.PP
+\fBproperty\fR [\fBappend\fR] [\fBpriority\fR] \fIstring\fR \fIstring\fR+
+.RS 4
+No default\&. You can set property for the script, each script have a different set of property\&. Both strings are quoted; the first string contains the name of the property to set, and the others contains its values\&.
+\fBappend\fR
+keyword append the values to the list of values for that property\&.
+\fBpriority\fR
+keyword disallow the setting of that property on the server\&.
+.RE
+.SH "SEE ALSO"
+.PP
+\fBamanda\fR(8),
+\fBamanda.conf\fR(5),
+\fBamcrypt\fR(8),
+\fBaespipe\fR(1)
+.PP
+The Amanda Wiki:
+: http://wiki.zmanda.com/
+.SH "AUTHORS"
+.PP
+\fBJames da Silva\fR <\&jds@amanda\&.org\&>
+.PP
+\fBStefan G\&. Weichinger\fR <\&sgw@amanda\&.org\&>

@@ -1,0 +1,172 @@
+'\" t
+.\"     Title: amplot
+.\"    Author: Olafur Gudmundsson <ogud@tis.com>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 02/21/2012
+.\"    Manual: System Administration Commands
+.\"    Source: Amanda 3.3.1
+.\"  Language: English
+.\"
+.TH "AMPLOT" "8" "02/21/2012" "Amanda 3\&.3\&.1" "System Administration Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+amplot \- visualize the behavior of Amanda
+.SH "SYNOPSIS"
+.HP \w'\fBamplot\fR\ 'u
+\fBamplot\fR [\-b] [\-c] [\-e] [\-g] [\-l] [\-p] [\-t\ \fIT\fR] \fIamdump_files\fR
+.br
+
+.SH "DESCRIPTION"
+.PP
+\fBAmplot\fR
+reads an
+\fBamdump\fR
+output file that Amanda generates each run (e\&.g\&.
+\fIamdump\&.1\fR) and translates the information into a picture format that may be used to determine how your installation is doing and if any parameters need to be changed\&.
+\fBAmplot\fR
+also prints out
+\fBamdump\fR
+lines that it either does not understand or knows to be warning or error lines and a summary of the start, end and total time for each backup image\&.
+.PP
+\fBAmplot\fR
+is a shell script that executes an
+\fBawk\fR
+program
+(\fIamplot\&.awk\fR) to scan the
+\fBamdump\fR
+output file\&. It then executes a
+\fBgnuplot\fR
+program
+(\fIamplot\&.g\fR) to generate the graph\&. The
+\fBawk\fR
+program is written in an enhanced version of awk, such as GNU awk (\fBgawk\fR(1)
+version 2\&.15 or later) or
+\fBnawk\fR(1)\&.
+.PP
+During execution,
+\fBamplot\fR
+generates a few temporary files that
+\fBgnuplot\fR
+uses\&. These files are deleted at the end of execution\&.
+.PP
+See the
+\fBamanda\fR(8)
+man page for more details about Amanda\&.
+.SH "OPTIONS"
+.PP
+\fB\-b\fR
+.RS 4
+Generate b/w postscript file (need
+\fB\-p\fR)\&.
+.RE
+.PP
+\fB\-c\fR
+.RS 4
+Compress
+\fIamdump_files\fR
+after plotting\&.
+.RE
+.PP
+\fB\-e\fR
+.RS 4
+Extend the X (time) axis if needed\&.
+.RE
+.PP
+\fB\-g\fR
+.RS 4
+Direct
+\fIgnuplot\fR
+output directly to the X11 display (default)\&.
+.RE
+.PP
+\fB\-p\fR
+.RS 4
+Direct postscript output to file
+\fIYYYYMMDD\fR\fI\&.ps\fR
+(opposite of
+\fB\-g\fR)\&.
+.RE
+.PP
+\fB\-l\fR
+.RS 4
+Generate landscape oriented output (needs
+\fB\-p\fR)\&.
+.RE
+.PP
+\fB\-t \fR\fIT\fR
+.RS 4
+Set the right edge of the plot to be
+\fIT\fR
+hours\&.
+.RE
+.PP
+The
+\fIamdump_files\fR
+may be in various compressed formats (\fIcompress\fR,
+\fBgzip\fR,
+\fBpact\fR,
+\fBcompact\fR)\&.
+.SH "INTERPRETATION"
+.PP
+The figure is divided into a number of regions\&. There are titles on the top that show important statistical information about the configuration and from this execution of
+\fBamdump\fR\&. In the figure, the X axis is time, with 0 being the moment
+\fBamdump\fR
+was started\&. The Y axis is divided into 5 regions:
+.PP
+\fIQUEUES:\fR
+How many backups have not been started, how many are waiting on space in the holding disk and how many have been transferred successfully to tape\&.
+.PP
+\fI%BANDWIDTH:\fR
+Percentage of allowed network bandwidth in use\&.
+.PP
+\fIHOLDING DISK:\fR
+The higher line depicts space allocated on the holding disk to backups in progress and completed backups waiting to be written to tape\&. The lower line depicts the fraction of the holding disk containing completed backups waiting to be written to tape including the file currently being written to tape\&. The scale is percentage of the holding disk\&.
+.PP
+\fITAPE:\fR
+Tape drive usage\&.
+.PP
+\fI%DUMPERS:\fR
+Percentage of active dumpers\&.
+.PP
+The idle period at the left of the graph is time
+\fBamdump\fR
+is asking the machines how much data they are going to dump\&. This process can take a while if hosts are down or it takes them a long time to generate estimates\&.
+.SH "BUGS"
+.PP
+Reports lines it does not recognize, mainly error cases but some are legitimate lines the program needs to be taught about\&.
+.SH "SEE ALSO"
+.PP
+\fBamanda\fR(8),
+\fBamdump\fR(8),
+\fBgnuplot\fR(1),
+\fBcompress\fR(1),
+\fBgzip\fR(1)
+.PP
+The Amanda Wiki:
+: http://wiki.zmanda.com/
+.SH "AUTHORS"
+.PP
+\fBOlafur Gudmundsson\fR <\&ogud@tis\&.com\&>
+.RS 4
+Trusted Information Systems
+.RE
+.PP
+\fBStefan G\&. Weichinger\fR <\&sgw@amanda\&.org\&>
