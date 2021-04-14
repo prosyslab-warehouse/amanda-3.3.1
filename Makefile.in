@@ -40,7 +40,7 @@
 # vim:ft=automake
 #
 # Adjust post-install permissions settings.  This rule works off two
-# specially-formatted variables, INSTALLPERMS_exec and INSTALLPERMS_data. 
+# specially-formatted variables, INSTALLPERMS_exec and INSTALLPERMS_data.
 # Each is a whitespace-separated list of commands, all of which are either
 # a variable assignment or a filename.  Three variables are available:
 #
@@ -83,7 +83,7 @@
 # the arguments being, respectively, owner:group, mode, and filename.  There will
 # be exactly one line for each file which has specific permissions.  The intention
 # is that this file be used by packaging scripts to set correct permissions at install
-# time.  Note that files which have no special permissions requirements do not appear 
+# time.  Note that files which have no special permissions requirements do not appear
 # in this file at all, due to limitations of Automake.
 
 VPATH = @srcdir@
@@ -1152,7 +1152,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = 1.4 foreign
-SUFFIXES = 
+SUFFIXES =
 EXTRA_DIST = $(SNAPSHOT_STAMP) $(pkgdata_DATA) autogen contrib/README \
 	contrib/dbbackup.README contrib/dbbackup.ksh \
 	contrib/dbbackup.sql contrib/dbbackup.tcl contrib/mkamandisk \
@@ -1163,11 +1163,11 @@ EXTRA_DIST = $(SNAPSHOT_STAMP) $(pkgdata_DATA) autogen contrib/README \
 	patches/regex-3.6alpha.patch patches/samba-largefs.patch \
 	patches/tar-1.12.patch UPGRADING DEVELOPING VERSION \
 	FULL_VERSION
-BUILT_SOURCES = 
-MOSTLYCLEANFILES = 
-CLEANFILES = 
+BUILT_SOURCES =
+MOSTLYCLEANFILES =
+CLEANFILES =
 DISTCLEANFILES = $(am__append_1)
-MAINTAINERCLEANFILES = 
+MAINTAINERCLEANFILES =
 
 # sed expression to strip leading directories from a filename; this converts e.g.,
 # src/foo/bar.so to bar.so.
@@ -1188,7 +1188,7 @@ strip_leading_dirs = s|^.*/||
 @WANT_INSTALLPERMS_TRUE@    if test -n "$$chmod"; then \
 @WANT_INSTALLPERMS_TRUE@	echo chmod "$$chmod" "$$pa"; \
 @WANT_INSTALLPERMS_TRUE@	chmod "$$chmod" "$$pa" || exit 1; \
-@WANT_INSTALLPERMS_TRUE@    fi 
+@WANT_INSTALLPERMS_TRUE@    fi
 
 @WANT_INSTALLPERMS_FALSE@installperms_sh = "$(top_builddir)/installperms.sh"
 do_installperms = dest=; chown=; chmod=; \
@@ -1225,7 +1225,6 @@ SUBDIRS = . \
 	$(RESTORE_SUBDIRS) \
 	$(RECOVER_SUBDIRS) \
 	$(PLOT_SUBDIRS) \
-	perl \
 	po \
 	man \
 	example \
@@ -1247,7 +1246,7 @@ all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
 .SUFFIXES:
-.SUFFIXES: 
+.SUFFIXES:
 am--refresh:
 	@:
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/automake/vars.am $(top_srcdir)/config/automake/installperms.am $(am__configure_deps)
